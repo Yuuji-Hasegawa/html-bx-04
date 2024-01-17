@@ -1,4 +1,5 @@
 @use "../settings" as setting;
+@use "../tools" as tool;
 @use "sass:map";
 
 .c-content-l,
@@ -66,7 +67,12 @@
 .c-gnav-link,
 .c-tel-link,
 .c-entry a,
-.c-text-link {
+.c-text-link,
+.c-header-link,
+.c-logo-link,
+.c-sns-link,
+.c-service-link,
+.c-ft-link {
   transition: all 0.25s ease;
 
   &:hover,
@@ -94,11 +100,34 @@
   }
 }
 
-.c-text-link {
-  &--full-wide {
-    display: block;
-    word-break: break-word;
-    overflow-wrap: break-word;
+.c-text-link--full-wide,
+.c-gnav-link,
+.c-service-link,
+.c-ft-link {
+  display: block;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.c-service-link {
+  color: map.get(setting.$sys-light, surfaceContainerLowest);
+
+  &:hover,
+  &:focus {
+    &::before {
+      background: rgba(map.get(setting.$sys-light, surfaceContainerLowest), 0.4);
+      transition: all 0.25s ease;
+    }
+  }
+}
+
+.c-gnav-link {
+  padding: setting.f-space-px(m) clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl));
+  color: currentcolor;
+
+  &:hover,
+  &:focus {
+    background-color: color-mix(in oklab, transparent, map.get(setting.$sys-light, onContainer) 15%);
   }
 }
 
@@ -131,15 +160,6 @@
   &--one-line {
     --trim: 1;
   }
-
-  .o-box--blog-card:visited & {
-    color: var(--c-text-visited);
-  }
-
-  .o-box--blog-card:hover &,
-  .o-box--blog-card:focus & {
-    color: var(--c-text-hover);
-  }
 }
 
 .c-share-parent {
@@ -157,4 +177,38 @@
   display: table;
   width: min(setting.breakpoints(overs), 100%);
   min-width: max-content;
+}
+
+.c-faq {
+  cursor: pointer;
+
+  &__q,
+  &__a {
+    position: relative;
+    padding: 0 clamp(setting.f-font-remsize(m), (setting.breakpoints(overs)), setting.f-font-remsize(l));
+
+    &::before {
+      position: absolute;
+      left: 0;
+      font-family: setting.$font-family-en-condensed;
+      font-size: clamp(setting.f-font-remsize(m), (setting.breakpoints(overs)), setting.f-font-remsize(l));
+      font-weight: setting.f-fontweight(b);
+    }
+  }
+
+  &__q {
+    &::before {
+      top: 0;
+      color: var(--c-button-normal);
+      content: "Q";
+    }
+  }
+
+  &__a {
+    &::before {
+      top: calc(setting.f-font-remsize(m) * 0.5);
+      color: var(--c-status-alert);
+      content: "A";
+    }
+  }
 }

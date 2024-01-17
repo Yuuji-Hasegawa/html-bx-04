@@ -3,32 +3,22 @@
 @use "sass:map";
 
 .c-header {
-  position: relative;
   display: flex;
   align-items: center;
-  padding-top: clamp(setting.f-space-px(s), (setting.breakpoints(overm)), setting.f-space-px(m));
-  padding-bottom: clamp(setting.f-space-px(s), (setting.breakpoints(overm)), setting.f-space-px(m));
+  padding: clamp(setting.f-space-px(s), (setting.breakpoints(overm)), setting.f-space-px(m))
+    clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl));
+
+  &--top {
+    position: sticky;
+    top: 0;
+    z-index: 997;
+    box-shadow: 0 1px 3px rgba(map.get(setting.$sys-light, primary), 0.7);
+  }
 }
 
 .c-logo-label {
-  &--header {
-    font-size: clamp(
-      map.get(setting.$fontRemSize, 2xl),
-      (setting.breakpoints(overm)),
-      map.get(setting.$fontRemSize, 3xl)
-    );
-  }
-
   &--footer {
     font-size: clamp(map.get(setting.$fontRemSize, l), (setting.breakpoints(overm)), map.get(setting.$fontRemSize, xl));
-  }
-}
-
-.c-pc-nav {
-  margin-left: auto;
-
-  @include tool.max-screen(setting.$underm) {
-    display: none;
   }
 }
 
@@ -73,45 +63,87 @@
   }
 }
 
-.c-gnav {
-  @include tool.max-screen(setting.$underm) {
-    position: absolute;
-    top: 100%;
+.c-sidebar {
+  position: fixed;
+  top: 0;
+  left: clamp(
+    calc(-1 * (338px + 2 * setting.f-space-px(xl))),
+    setting.breakpoints(unders),
+    calc(-1 * (281px + 2 * setting.f-space-px(m)))
+  );
+  z-index: 999;
+  width: 100%;
+  max-width: clamp(
+    calc(281px + 2 * setting.f-space-px(m)),
+    setting.breakpoints(overm),
+    calc(338px + 2 * setting.f-space-px(xl))
+  );
+  height: 100%;
+  overflow-y: auto;
+  pointer-events: none;
+  visibility: hidden;
+  box-shadow: 0 1px 3px rgba(map.get(setting.$sys-light, primary), 0.7);
+  opacity: 0;
+  transition: left 0.1s ease-out;
+
+  &[aria-hidden="false"] {
     left: 0;
-    z-index: 9999;
-    display: none;
-    width: 100%;
-    padding-right: clamp(
-      clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl)),
-      setting.breakpoints(overs),
-      clamp(setting.f-space-px(xl), setting.breakpoints(overm), setting.f-space-px(3xl))
-    );
-    padding-bottom: setting.f-space-px(l);
-    padding-left: clamp(
-      clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl)),
-      setting.breakpoints(overs),
-      clamp(setting.f-space-px(xl), setting.breakpoints(overm), setting.f-space-px(3xl))
-    );
-    background: var(--c-bg-qua);
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transition: left 0.1s ease-out;
 
-    &--is-open {
+    & + .c-sidebar-bg {
       display: block;
+      pointer-events: auto;
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.1s ease-out;
     }
 
-    &-item {
-      width: 100%;
+    body:has(&) {
+      overflow: hidden;
+    }
+  }
+}
+
+.c-sidebar-bottom {
+  margin-right: clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl));
+  margin-left: clamp(setting.f-space-px(m), setting.breakpoints(overm), setting.f-space-px(xl));
+}
+
+.c-sidebar-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  display: none;
+  pointer-events: none;
+  cursor: pointer;
+  visibility: hidden;
+  background: rgba(map.get(setting.$sys-light, scrim), 0.5);
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+.swiper {
+  & .swiper-button-prev,
+  & .swiper-button-next {
+    color: map.get(setting.$sys-light, surfaceContainerLowest);
+    transition: all 0.25s ease-out;
+
+    &:hover,
+    &:focus {
+      color: color-mix(in oklab, transparent, map.get(setting.$sys-light, surfaceContainerLowest) 15%);
     }
   }
 
-  @include tool.min-screen(setting.$breakm) {
-    margin-left: auto;
-  }
+  & .swiper-pagination-bullet {
+    background: map.get(setting.$sys-light, surfaceContainerLowest);
+    transition: all 0.25s ease-out;
 
-  &-link {
-    color: currentcolor;
-
-    @include tool.max-screen(setting.$underm) {
-      display: block;
+    &:hover,
+    &:focus {
+      background-color: color-mix(in oklab, transparent, map.get(setting.$sys-light, surfaceContainerLowest) 15%);
     }
   }
 }
