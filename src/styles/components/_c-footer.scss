@@ -11,7 +11,8 @@
 }
 
 .c-ft-link {
-  padding: clamp(setting.f-space-px(s), (setting.breakpoints(overm)), setting.f-space-px(m));
+  padding: clamp(setting.f-space-px(s), (setting.breakpoints(overm)), setting.f-space-px(m))
+    clamp(0px, (setting.breakpoints(overm)), setting.f-space-px(m));
   color: currentcolor;
 
   &:hover,
